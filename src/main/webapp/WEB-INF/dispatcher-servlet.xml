@@ -14,6 +14,7 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	<mvc:annotation-driven />
 	<context:component-scan base-package="com.ms" />
 		
+	<bean id="productService" class="com.ms.service.impl.ProductServiceImpl"/>
 		
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
