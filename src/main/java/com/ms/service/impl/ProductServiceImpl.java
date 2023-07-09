@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ms.dao.ProductDAO;
 import com.ms.entity.Product;
+import com.ms.model.ProductPriceModel;
 import com.ms.service.ProductService;
 
 
@@ -48,6 +49,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> findByPriceRange(int low, int high) {
 		return productDAO.findByPriceRange(low, high);
+	}
+
+	@Override
+	public List<ProductPriceModel> findAllPriceList() {
+		return productDAO.findAllPriceList();
 	}
 
 }

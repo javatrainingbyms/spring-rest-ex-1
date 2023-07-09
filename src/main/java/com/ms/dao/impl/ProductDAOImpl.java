@@ -6,12 +6,17 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ms.dao.ProductDAO;
 import com.ms.entity.Product;
+import com.ms.model.ProductPriceModel;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO {
@@ -84,6 +89,22 @@ public class ProductDAOImpl implements ProductDAO {
 		List<Product> products=criteria.list();
 		session.close();
 		return products;
+	}
+
+	@Override
+	public List<ProductPriceModel> findAllPriceList() {
+		Session session=sessionFactory.openSession();
+		Criteria criteria=session.createCriteria(Product.class);
+		Projection pr1=Projections.property("name");
+		Projection pr2=Projections.property("price");
+		ProjectionList pList=Projections.projectionList();
+		pList.add(pr1, "name");
+		pList.add(pr2,"price");
+		criteria.setProjection(pList);
+		criteria.setResultTransformer(Transformers.aliasToBean(ProductPriceModel.class));
+		List<ProductPriceModel> productPriceModelList=criteria.list();
+		session.close();
+		return productPriceModelList;
 	}
 
 }
