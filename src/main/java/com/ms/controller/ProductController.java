@@ -2,7 +2,11 @@ package com.ms.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
+import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.entity.Product;
+import com.ms.model.ProductDTO;
 import com.ms.model.ProductPriceModel;
 import com.ms.service.ProductService;
 
@@ -22,9 +27,13 @@ public class ProductController {
 	private ProductService productService;
 	
 	@PostMapping(produces="application/json", consumes="application/json")
-	public Product saveProduct(@RequestBody Product product) {
-		Product p=productService.save(product);
-		return p;
+	public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) {
+		DozerBeanMapper mapper=new DozerBeanMapper();
+		Product p=mapper.map(productDTO, Product.class);
+		Product pr=productService.save(p);
+		ProductDTO productDTOResponse=mapper.map(pr, ProductDTO.class);
+		ResponseEntity<ProductDTO> response=new ResponseEntity<ProductDTO>(productDTOResponse, HttpStatus.CREATED);
+		return response;
 	}
 	
 	
